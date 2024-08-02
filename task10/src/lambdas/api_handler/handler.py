@@ -6,6 +6,7 @@ import json
 import re
 import boto3
 import os
+import re
 
 _LOG = get_logger('ApiHandler-handler')
 
@@ -22,6 +23,10 @@ class ApiHandler(AbstractLambda):
 
     def validate_request(self, event) -> dict:
         pass
+
+    def validate_email(self, email):
+        pattern = r'^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$'
+        return re.match(pattern, email)
 
     def signup(self, data: dict):
 
@@ -60,7 +65,9 @@ class ApiHandler(AbstractLambda):
             _LOG.info(f"User create response: {resp}")
         except Exception as e:
             _LOG.error(f"Exception during create user: {e}")
-            raise
+            return {
+                "statusCode": 400
+            }
 
         try:
             resp = client.admin_set_user_password(
@@ -72,7 +79,9 @@ class ApiHandler(AbstractLambda):
             _LOG.info(f'set_user_password permanent response: {resp}')
         except Exception as e:
             _LOG.error(f"Exception during setting password: {e}")
-            raise
+            return {
+                "statusCode": 400
+            }
         return {
             "statusCode": 200
         }
