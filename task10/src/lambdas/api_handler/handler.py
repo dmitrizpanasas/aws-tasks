@@ -43,11 +43,15 @@ class ApiHandler(AbstractLambda):
                 Username=email,
                 UserAttributes=[
                     {
-                        "Name": "firstName",
+                        'Name': 'email',
+                        'Value': email
+                    },
+                    {
+                        "Name": "given_name",
                         "Value": first_name
                     },
                     {
-                        "Name": "lastName",
+                        "Name": "family_name",
                         "Value": last_name
                     }
                 ],
