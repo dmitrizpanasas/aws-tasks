@@ -87,6 +87,7 @@ class ApiHandler(AbstractLambda):
         }
 
     def signin(self, data: dict):
+        _LOG.info(data)
         client = boto3.client('cognito-idp')
         user_pool_name = os.environ.get("USER_POOL")
         _LOG.info(f"Looking for user pool id for: {user_pool_name}")
@@ -105,7 +106,7 @@ class ApiHandler(AbstractLambda):
             print(user_pool_item)
             if user_pool_item["ClientName"] == email:
                 client_id = user_pool_item['ClientId']
-
+        if client_id
         try:
             response = client.initiate_auth(
                 ClientId=client_id,
