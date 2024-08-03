@@ -86,8 +86,47 @@ class ApiHandler(AbstractLambda):
             "statusCode": 200
         }
 
-    def signin(self):
-        ...
+    def signin(self, data: dict):
+        client = boto3.client('cognito-idp')
+        user_pool_name = os.environ.get("USER_POOL")
+        _LOG.info(f"Looking for user pool id for: {user_pool_name}")
+
+        user_pool_id = get_user_pool_id(client, user_pool_name)
+        _LOG.info(f"User pool id: {user_pool_id}")
+
+        email = data.get("email", "")
+        password = data.get("password", "")
+
+        response = client.list_user_pool_clients(
+            UserPoolId=user_pool_id
+        )
+        client_id = None
+        for user_pool_item in response["UserPoolClients"]:
+            print(user_pool_item)
+            if user_pool_item["ClientName"] == email:
+                client_id = user_pool_item['ClientId']
+
+        try:
+            response = client.initiate_auth(
+                ClientId=client_id,
+                AuthFlow='USER_PASSWORD_AUTH',
+                AuthParameters={
+                    'USERNAME': email,
+                    'PASSWORD': password
+                }
+            )
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'accessToken': response['AuthenticationResult']['IdToken']})
+            }
+
+        except Exception as e:
+            _LOG.error(f"Exception during initiate_auth: {e}")
+            return {
+                "statusCode": 400
+            }
+
+
 
 
     def tables(self):
@@ -112,7 +151,7 @@ class ApiHandler(AbstractLambda):
             if path == "/signup":
                 return self.signup(body)
             elif path == "/signin":
-                pass
+                return self.signin(body)
             elif path == "/tables":
                 if method == "GET":
                     pass
