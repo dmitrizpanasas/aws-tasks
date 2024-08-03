@@ -106,7 +106,10 @@ class ApiHandler(AbstractLambda):
             print(user_pool_item)
             if user_pool_item["ClientName"] == email:
                 client_id = user_pool_item['ClientId']
-        if client_id
+        if not client_id:
+            return {
+                "statusCode": 400
+            }
         try:
             response = client.initiate_auth(
                 ClientId=client_id,
