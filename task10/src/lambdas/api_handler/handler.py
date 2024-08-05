@@ -157,6 +157,7 @@ class ApiHandler(AbstractLambda):
                 'body': json.dumps({'id': item['id']})
             }
         except Exception as e:
+            _LOG.error(f"Exception during post_tables: {e}")
             return {
                 'statusCode': 400
             }
