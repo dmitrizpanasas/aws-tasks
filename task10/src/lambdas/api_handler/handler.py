@@ -202,7 +202,7 @@ class ApiHandler(AbstractLambda):
         """
 
         path = event.get("path", None)
-        method = event.get("methodHttp", "")
+        method = event.get("httpMethod", "")
         _LOG.info(f"Event: {event}")
         _LOG.info(f"Context: {context}")
         body = json.loads(event['body'])
