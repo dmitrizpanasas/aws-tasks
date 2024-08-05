@@ -138,8 +138,34 @@ class ApiHandler(AbstractLambda):
             }
 
 
-    def tables(self):
-        ...
+    def get_tables(self):
+        _LOG.info('Get tables')
+
+        db = boto3.resource('dynamodb')
+        table_name = os.environ['TABLES_TABLE']
+        table = db.Table(table_name)
+        result = []
+        try:
+            response = table.scan()
+            for item in response["Items"]:
+                result.append({
+                    "id": item["id"],
+                    "number": item["number"],
+                    "places": item["places"],
+                    "isVip": item["isVip"],
+                    "minOrder": item["minOrder"]
+                })
+            return {
+                'statusCode': 200,
+                'body': json.dumps(result)
+            }
+        except Exception as e:
+            _LOG.error(f"Error while getting tables: {e}")
+            return {
+                "statusCode": 400
+            }
+
+
 
     def reservations(self):
         ...
@@ -162,7 +188,7 @@ class ApiHandler(AbstractLambda):
                 return self.signin(body)
             elif path == "/tables":
                 if method == "GET":
-                    pass
+                    return self.get_tables()
                 elif method == "POST":
                     pass
             elif path == "reservations":
