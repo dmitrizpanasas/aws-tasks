@@ -50,7 +50,15 @@
     "sms_configuration": {},
     "username_attributes": [],
     "custom_attributes": [],
-    "client": {}
+    "client": {
+       "client_name": "clientapp",
+        "generate_secret": false,
+        "explicit_auth_flows": [
+          "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+          "ALLOW_CUSTOM_AUTH",
+          "ALLOW_USER_PASSWORD_AUTH"
+      ]
+    }
   },
   "task10_api": {
     "resource_type": "api_gateway",

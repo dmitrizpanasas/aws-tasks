@@ -102,10 +102,11 @@ class ApiHandler(AbstractLambda):
         response = client.list_user_pool_clients(
             UserPoolId=user_pool_id
         )
+        _LOG.info(f"List user pool clients: {response}")
+
         client_id = None
         for user_pool_item in response["UserPoolClients"]:
-            print(user_pool_item)
-            if user_pool_item["ClientName"] == email:
+            if user_pool_item["ClientName"] == "clientapp":
                 client_id = user_pool_item['ClientId']
                 _LOG.info(f"Found client id {client_id}")
                 break
