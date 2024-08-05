@@ -137,9 +137,32 @@ class ApiHandler(AbstractLambda):
                 "statusCode": 400
             }
 
+    def post_tables(self, data: dict):
+        _LOG.info('POST tables')
+        db = boto3.resource('dynamodb')
+        table_name = os.environ['TABLES_TABLE']
+        table = db.Table(table_name)
+
+        try:
+            item = {
+                "id": data["id"],
+                "number": data["number"],
+                "places": data["places"],
+                "isVip": data["isVip"],
+                "minOrder": data["minOrder"]
+            }
+            table.put_item(Item=item)
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'id': item['id']})
+            }
+        except Exception as e:
+            return {
+                'statusCode': 400
+            }
 
     def get_tables(self):
-        _LOG.info('Get tables')
+        _LOG.info('GET tables')
 
         db = boto3.resource('dynamodb')
         table_name = os.environ['TABLES_TABLE']
@@ -190,7 +213,7 @@ class ApiHandler(AbstractLambda):
                 if method == "GET":
                     return self.get_tables()
                 elif method == "POST":
-                    pass
+                    return self.post_tables(body)
             elif path == "reservations":
                 if method == "GET":
                     pass
