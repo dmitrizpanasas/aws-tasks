@@ -141,6 +141,7 @@ class ApiHandler(AbstractLambda):
         _LOG.info('POST tables')
         db = boto3.resource('dynamodb')
         table_name = os.environ['TABLES_TABLE']
+        _LOG.info(f'POST tables: {table_name}')
         table = db.Table(table_name)
 
         try:
