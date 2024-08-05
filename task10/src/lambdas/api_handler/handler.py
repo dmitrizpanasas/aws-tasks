@@ -14,7 +14,7 @@ _LOG = get_logger('ApiHandler-handler')
 def get_user_pool_id(client, user_pool_name: str) -> str:
     user_pools = client.list_user_pools(MaxResults=60)
     for user_pool in user_pools["UserPools"]:
-        _LOG.info(f"User pool: {user_pool}")
+        # _LOG.info(f"User pool: {user_pool}")
         if user_pool["Name"] == user_pool_name:
             return user_pool["Id"]
 
@@ -30,6 +30,7 @@ class ApiHandler(AbstractLambda):
 
     def signup(self, data: dict):
 
+        _LOG.info(f"Sign up with data: {data}")
         client = boto3.client('cognito-idp')
         user_pool_name = os.environ.get("USER_POOL")
         _LOG.info(f"Looking for user pool id for: {user_pool_name}")
@@ -87,10 +88,10 @@ class ApiHandler(AbstractLambda):
         }
 
     def signin(self, data: dict):
-        _LOG.info(data)
+        _LOG.info(f"Signing in: {data}")
         client = boto3.client('cognito-idp')
         user_pool_name = os.environ.get("USER_POOL")
-        _LOG.info(f"Looking for user pool id for: {user_pool_name}")
+        _LOG.info(f"Looking for user pool id for (pool name): {user_pool_name}")
 
         user_pool_id = get_user_pool_id(client, user_pool_name)
         _LOG.info(f"User pool id: {user_pool_id}")
@@ -106,7 +107,10 @@ class ApiHandler(AbstractLambda):
             print(user_pool_item)
             if user_pool_item["ClientName"] == email:
                 client_id = user_pool_item['ClientId']
+                _LOG.info(f"Found client id {client_id}")
+                break
         if not client_id:
+            _LOG.info("Client id is not found")
             return {
                 "statusCode": 400
             }
@@ -119,6 +123,8 @@ class ApiHandler(AbstractLambda):
                     'PASSWORD': password
                 }
             )
+
+            _LOG.info(f"Client initiate_auth response: {response}")
             return {
                 'statusCode': 200,
                 'body': json.dumps({'accessToken': response['AuthenticationResult']['IdToken']})
@@ -131,11 +137,8 @@ class ApiHandler(AbstractLambda):
             }
 
 
-
-
     def tables(self):
         ...
-
 
     def reservations(self):
         ...
