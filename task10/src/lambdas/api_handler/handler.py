@@ -184,7 +184,6 @@ class ApiHandler(AbstractLambda):
                 'statusCode': 400
             }
 
-
     def get_tables(self):
         _LOG.info('GET tables')
 
@@ -239,13 +238,12 @@ class ApiHandler(AbstractLambda):
                 return self.signin(body)
             elif path == "/tables":
                 if method == "GET":
-                    if event["resource"] == "/tables/{tableId}":
-                        table_id = int(event['path'].split('/')[-1])
-                        return self.get_table_by_id(table_id)
-                    else:
-                        return self.get_tables()
+                    return self.get_tables()
                 elif method == "POST":
                     return self.post_tables(body)
+            elif event["resource"] == "/tables/{tableId}":
+                table_id = int(event['path'].split('/')[-1])
+                return self.get_table_by_id(table_id)
             elif path == "reservations":
                 if method == "GET":
                     return self.get_reservations()
