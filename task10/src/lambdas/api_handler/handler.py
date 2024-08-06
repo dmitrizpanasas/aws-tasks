@@ -317,7 +317,7 @@ class ApiHandler(AbstractLambda):
             elif event["resource"] == "/tables/{tablesId}":
                 table_id = int(event['path'].split('/')[-1])
                 return self.get_table_by_id(table_id)
-            elif path == "reservations":
+            elif path == "/reservations":
                 if method == "GET":
                     return self.get_reservations()
                 elif method == "POST":
