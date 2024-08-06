@@ -180,6 +180,7 @@ class ApiHandler(AbstractLambda):
                     "minOrder": int(item["minOrder"])})
             }
         except Exception as e:
+            _LOG.error(f"Error while getting table by id: {e}")
             return {
                 'statusCode': 400
             }
