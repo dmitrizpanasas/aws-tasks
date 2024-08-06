@@ -239,9 +239,10 @@ class ApiHandler(AbstractLambda):
             }
             _LOG.info(f"Item of reservation: {item}")
             table.put_item(Item=item)
+            response = {"reservationId": reservation_id}
             return {
                 "statusCode": 200,
-                "body": json.dumps(reservation_id)
+                "body": json.dumps(response)
             }
         except Exception as e:
             _LOG.error(f"Error while post reservation: {e}")
