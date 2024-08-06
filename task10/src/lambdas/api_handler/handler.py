@@ -195,8 +195,8 @@ class ApiHandler(AbstractLambda):
         try:
             result = []
             response = table.scan()
+            _LOG.info(f"Item from Tables: {response}")
             for item in response["Items"]:
-                _LOG.info(f"Item from Tables: {item}")
                 result.append({
                     "id": int(item["id"]),
                     "number": int(item["number"]),
