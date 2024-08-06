@@ -203,6 +203,7 @@ class ApiHandler(AbstractLambda):
                     "isVip": item["isVip"],
                     "minOrder": int(item["minOrder"])
                 })
+            result = sorted(result, key=lambda i: i['id'])
             _LOG.info(f"List tables: {result}")
             return {
                 'statusCode': 200,
