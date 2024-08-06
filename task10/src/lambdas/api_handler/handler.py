@@ -230,17 +230,16 @@ class ApiHandler(AbstractLambda):
         method = event.get("httpMethod", "")
         _LOG.info(f"Event: {event}")
         _LOG.info(f"Context: {context}")
-        body = json.loads(event['body'])
         if path:
             if path == "/signup":
-                return self.signup(body)
+                return self.signup(json.loads(event['body']))
             elif path == "/signin":
-                return self.signin(body)
+                return self.signin(json.loads(event['body']))
             elif path == "/tables":
                 if method == "GET":
                     return self.get_tables()
                 elif method == "POST":
-                    return self.post_tables(body)
+                    return self.post_tables(json.loads(event['body']))
             elif event["resource"] == "/tables/{tableId}":
                 table_id = int(event['path'].split('/')[-1])
                 return self.get_table_by_id(table_id)
@@ -248,7 +247,8 @@ class ApiHandler(AbstractLambda):
                 if method == "GET":
                     return self.get_reservations()
                 elif method == "POST":
-                    return self.post_reservation(body)
+                    return self.post_reservation(json.loads(event['body'])
+)
 
 HANDLER = ApiHandler()
 
