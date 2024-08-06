@@ -190,9 +190,10 @@ class ApiHandler(AbstractLambda):
 
         db = boto3.resource('dynamodb')
         table_name = os.environ['TABLES_TABLE']
+        _LOG.info(f'GET tables. table name: {table_name}')
         table = db.Table(table_name)
-        result = []
         try:
+            result = []
             response = table.scan()
             for item in response["Items"]:
                 _LOG.info(f"Item from Tables: {item}")
