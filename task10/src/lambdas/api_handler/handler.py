@@ -206,7 +206,7 @@ class ApiHandler(AbstractLambda):
             _LOG.info(f"List tables: {result}")
             return {
                 'statusCode': 200,
-                'body': json.dumps(result)
+                'body': {"tables": result}
             }
         except Exception as e:
             _LOG.error(f"Error while getting tables: {e}")
