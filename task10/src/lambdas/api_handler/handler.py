@@ -195,6 +195,7 @@ class ApiHandler(AbstractLambda):
         try:
             response = table.scan()
             for item in response["Items"]:
+                _LOG.info(f"Item from Tables: {item}")
                 result.append({
                     "id": int(item["id"]),
                     "number": int(item["number"]),
@@ -202,6 +203,7 @@ class ApiHandler(AbstractLambda):
                     "isVip": item["isVip"],
                     "minOrder": int(item["minOrder"])
                 })
+            _LOG.info(f"List tables: {result}")
             return {
                 'statusCode': 200,
                 'body': json.dumps(result)
