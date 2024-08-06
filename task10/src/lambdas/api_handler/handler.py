@@ -171,13 +171,16 @@ class ApiHandler(AbstractLambda):
 
         try:
             item = table.get_item(Key={'id': table_id})
+            item = item["Item"]
+            _LOG.info(f"Item from table by id {table_id}: {item}")
             return {
                 'statusCode': 200,
-                'body': json.dumps({"id": int(item["id"]),
-                    "number": int(item["number"]),
-                    "places": int(item["places"]),
-                    "isVip": item["isVip"],
-                    "minOrder": int(item["minOrder"])})
+                'body': json.dumps(
+                    {"id": int(item["id"]),
+                     "number": int(item["number"]),
+                     "places": int(item["places"]),
+                     "isVip": item["isVip"],
+                     "minOrder": int(item["minOrder"])})
             }
         except Exception as e:
             _LOG.error(f"Error while getting table by id: {e}")
@@ -193,22 +196,23 @@ class ApiHandler(AbstractLambda):
         _LOG.info(f'GET tables. table name: {table_name}')
         table = db.Table(table_name)
         try:
-            result = []
+            tables = []
             response = table.scan()
             _LOG.info(f"Item from Tables: {response}")
             for item in response["Items"]:
-                result.append({
+                tables.append({
                     "id": int(item["id"]),
                     "number": int(item["number"]),
                     "places": int(item["places"]),
                     "isVip": item["isVip"],
                     "minOrder": int(item["minOrder"])
                 })
-            result = sorted(result, key=lambda i: i['id'])
-            _LOG.info(f"List tables: {result}")
+            tables = sorted(tables, key=lambda i: i['id'])
+            result = {"tables": tables}
+            _LOG.info(f"List of sorted tables: {result}")
             return {
                 'statusCode': 200,
-                'body': {"tables": result}
+                'body': json.dumps(result)
             }
         except Exception as e:
             _LOG.error(f"Error while getting tables: {e}")
