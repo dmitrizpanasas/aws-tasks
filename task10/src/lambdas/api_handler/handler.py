@@ -163,6 +163,28 @@ class ApiHandler(AbstractLambda):
                 'statusCode': 400
             }
 
+    def get_table_by_id(self, table_id: int):
+        _LOG.info(f'GET table by id: {table_id}')
+        db = boto3.resource('dynamodb')
+        table_name = os.environ['TABLES_TABLE']
+        table = db.Table(table_name)
+
+        try:
+            item = table.get_item(Key={'id': table_id})
+            return {
+                'statusCode': 200,
+                'body': json.dumps({"id": int(item["id"]),
+                    "number": int(item["number"]),
+                    "places": int(item["places"]),
+                    "isVip": item["isVip"],
+                    "minOrder": int(item["minOrder"])})
+            }
+        except Exception as e:
+            return {
+                'statusCode': 400
+            }
+
+
     def get_tables(self):
         _LOG.info('GET tables')
 
@@ -174,11 +196,11 @@ class ApiHandler(AbstractLambda):
             response = table.scan()
             for item in response["Items"]:
                 result.append({
-                    "id": item["id"],
-                    "number": item["number"],
-                    "places": item["places"],
+                    "id": int(item["id"]),
+                    "number": int(item["number"]),
+                    "places": int(item["places"]),
                     "isVip": item["isVip"],
-                    "minOrder": item["minOrder"]
+                    "minOrder": int(item["minOrder"])
                 })
             return {
                 'statusCode': 200,
@@ -190,10 +212,11 @@ class ApiHandler(AbstractLambda):
                 "statusCode": 400
             }
 
+    def post_reservation(self, data: dict):
+        pass
 
-
-    def reservations(self):
-        ...
+    def get_reservations(self):
+        pass
 
 
     def handle_request(self, event, context):
@@ -213,14 +236,18 @@ class ApiHandler(AbstractLambda):
                 return self.signin(body)
             elif path == "/tables":
                 if method == "GET":
-                    return self.get_tables()
+                    if event["resource"] == "/tables/{tableId}":
+                        table_id = int(event['path'].split('/')[-1])
+                        return self.get_table_by_id(table_id)
+                    else:
+                        return self.get_tables()
                 elif method == "POST":
                     return self.post_tables(body)
             elif path == "reservations":
                 if method == "GET":
-                    pass
+                    return self.get_reservations()
                 elif method == "POST":
-                    pass
+                    return self.post_reservation(body)
 
 HANDLER = ApiHandler()
 
