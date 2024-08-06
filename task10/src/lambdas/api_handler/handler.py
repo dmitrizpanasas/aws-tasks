@@ -237,6 +237,7 @@ class ApiHandler(AbstractLambda):
                 "slotTimeStart": data["slotTimeStart"],
                 "slotTimeEnd": data["slotTimeEnd"]
             }
+            _LOG.info(f"Item of reservation: {item}")
             table.put_item(Item=item)
             return {
                 "statusCode": 200,
@@ -321,8 +322,7 @@ class ApiHandler(AbstractLambda):
                 if method == "GET":
                     return self.get_reservations()
                 elif method == "POST":
-                    return self.post_reservation(json.loads(event['body'])
-                                                 )
+                    return self.post_reservation(json.loads(event['body']))
 
 
 HANDLER = ApiHandler()
