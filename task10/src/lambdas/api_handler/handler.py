@@ -223,10 +223,34 @@ class ApiHandler(AbstractLambda):
 
     def post_reservation(self, data: dict):
         _LOG.info("Post reservation")
+
+        db = boto3.resource('dynamodb')
+
+        tables = db.Table( os.environ['TABLES_TABLE'])
+        response = tables.scan()
+        _LOG.info(f'Scan response: {response}')
+        target_table = data['tableNumber']
+        for table in response['Items']:
+            _LOG.info(f'table item: {table}')
+            if table['number'] == target_table:
+                _LOG.info(f'Target table exists found: {target_table}')
+                break
+        else:
+            _LOG.error(f'No such table: {target_table}')
+            return {
+                'statusCode': 400
+            }
+
+        # TODO: check overriding
+
         db = boto3.resource('dynamodb')
         table_name = os.environ['RESERVATION_TABLE']
         _LOG.info(f'POST reservations. table name: {table_name}')
         table = db.Table(table_name)
+        table_name = os.environ['TABLES_TABLE']
+        _LOG.info(f'TABLES_TABLE (reserv post): {table_name}')
+        dynamodb = boto3.resource('dynamodb')
+
         try:
             reservation_id = str(uuid4())
             item = {
@@ -252,16 +276,6 @@ class ApiHandler(AbstractLambda):
         pass
 
     def get_reservations(self):
-        """
-         {
-         "tableNumber": // int, number of the table
-         "clientName": //string
-         "phoneNumber": //string
-         "date": // string in yyyy-MM-dd format
-         "slotTimeStart": // string in "HH:MM" format, like "13:00",
-         "slotTimeEnd": // string in "HH:MM" format, like "15:00"
-        }
-        """
         _LOG.info('GET reservations')
 
         db = boto3.resource('dynamodb')
