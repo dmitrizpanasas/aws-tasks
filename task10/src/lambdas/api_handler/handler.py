@@ -3,6 +3,7 @@ import os
 from commons.log_helper import get_logger
 from commons.abstract_lambda import AbstractLambda
 import json
+from uuid import uuid4
 import re
 import boto3
 import os
@@ -221,11 +222,78 @@ class ApiHandler(AbstractLambda):
             }
 
     def post_reservation(self, data: dict):
+        _LOG.info("Post reservation")
+        db = boto3.resource('dynamodb')
+        table_name = os.environ['RESERVATION_TABLE']
+        _LOG.info(f'POST reservations. table name: {table_name}')
+        table = db.Table(table_name)
+        try:
+            reservation_id = str(uuid4())
+            item = {
+                "id": reservation_id,
+                "clientName": data["clientName"],
+                "phoneNumber": data["phoneNumber"],
+                "date": data["date"],
+                "slotTimeStart": data["slotTimeStart"],
+                "slotTimeEnd": data["slotTimeEnd"]
+            }
+            table.put_item(Item=item)
+            return {
+                "statusCode": 200,
+                "body": json.dumps(reservation_id)
+            }
+        except Exception as e:
+            _LOG.error(f"Error while post reservation: {e}")
+            return {
+                "statusCode": 400
+            }
         pass
 
     def get_reservations(self):
-        pass
+        """
+         {
+         "tableNumber": // int, number of the table
+         "clientName": //string
+         "phoneNumber": //string
+         "date": // string in yyyy-MM-dd format
+         "slotTimeStart": // string in "HH:MM" format, like "13:00",
+         "slotTimeEnd": // string in "HH:MM" format, like "15:00"
+        }
+        """
+        _LOG.info('GET reservations')
 
+        db = boto3.resource('dynamodb')
+        table_name = os.environ['RESERVATION_TABLE']
+        _LOG.info(f'GET reservations. table name: {table_name}')
+        table = db.Table(table_name)
+
+        try:
+            result = []
+            response = table.scan()
+            items = response['Items']
+            for item in items:
+                result.append(
+                    {
+                        "tableNumber": int(item["tableNumber"]),
+                        "clientName": item["clientName"],
+                        "phoneNumber": item["phoneNumber"],
+                        "date": item["date"],
+                        "slotTimeStart": item["slotTimeStart"],
+                        "slotTimeEnd": item["slotTimeEnd"],
+                    }
+                )
+
+            result = {'reservations': items}
+            _LOG.info(f"Reservation list: {result}")
+            return {
+                "statusCode": 200,
+                "body": json.dumps(result)
+            }
+        except Exception as e:
+            _LOG.error(f"Error while getting list of reservation: {e}")
+            return {
+                "statusCode": 400
+            }
 
     def handle_request(self, event, context):
         """
@@ -254,7 +322,8 @@ class ApiHandler(AbstractLambda):
                     return self.get_reservations()
                 elif method == "POST":
                     return self.post_reservation(json.loads(event['body'])
-)
+                                                 )
+
 
 HANDLER = ApiHandler()
 
