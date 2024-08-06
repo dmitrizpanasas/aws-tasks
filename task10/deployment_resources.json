@@ -8,6 +8,7 @@
             "logs:CreateLogStream",
             "logs:PutLogEvents",
             "dynamodb:GetItem",
+            "dynamodb:Scan",
             "dynamodb:Query",
             "dynamodb:PutItem",
             "dynamodb:Batch*",
