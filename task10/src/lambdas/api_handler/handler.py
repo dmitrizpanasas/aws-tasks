@@ -273,6 +273,7 @@ class ApiHandler(AbstractLambda):
             reservation_id = str(uuid4())
             item = {
                 "id": reservation_id,
+                "tableNumber": data["tableNumber"],
                 "clientName": data["clientName"],
                 "phoneNumber": data["phoneNumber"],
                 "date": data["date"],
