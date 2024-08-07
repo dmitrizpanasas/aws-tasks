@@ -8,6 +8,7 @@ import re
 import boto3
 import os
 import re
+from datetime import datetime
 
 _LOG = get_logger('ApiHandler-handler')
 
@@ -258,8 +259,12 @@ class ApiHandler(AbstractLambda):
                 'statusCode': 400
             }
 
-        # TODO: check overriding
-
+        reservations = self._get_reservations()
+        if not self._can_reserve_table(data, reservations):
+            _LOG.error("The table has already reserved!")
+            return {
+                'statusCode': 400
+            }
 
         db = boto3.resource('dynamodb')
         table_name = os.environ['RESERVATION_TABLE']
@@ -294,31 +299,48 @@ class ApiHandler(AbstractLambda):
             }
         pass
 
-    def get_reservations(self):
-        _LOG.info('GET reservations')
+    def _can_reserve_table(self, new_reservation: dict, found_reservations: list):
+        target_date = new_reservation.get("date")
+        target_time_start = datetime.strptime(new_reservation.get("slotTimeStart"), "%H:%M")
+        target_time_end = datetime.strptime(new_reservation.get("slotTimeEnd"), "%H:%M")
+        _LOG.info(f"Checking if possible to new reservation: {new_reservation}")
+        for item in found_reservations:
+            _LOG.info(f"Checking with: {item}")
+            if item['date'] == target_date:
+                item_start = datetime.strptime(item.get("slotTimeStart"), "%H:%M")
+                item_end = datetime.strptime(item.get("slotTimeEnd"), "%H:%M")
+                if not (item_start <= target_date <= item_end):
+                    _LOG.error("Cannot reserve: overlapping!")
+                    return False
+        return True
 
+    def _get_reservations(self):
         db = boto3.resource('dynamodb')
         table_name = os.environ['RESERVATION_TABLE']
         _LOG.info(f'GET reservations. table name: {table_name}')
         table = db.Table(table_name)
+        result = []
+        response = table.scan()
+        items = response['Items']
+        for item in items:
+            result.append(
+                {
+                    "tableNumber": int(item["tableNumber"]),
+                    "clientName": item["clientName"],
+                    "phoneNumber": item["phoneNumber"],
+                    "date": item["date"],
+                    "slotTimeStart": item["slotTimeStart"],
+                    "slotTimeEnd": item["slotTimeEnd"],
+                }
+            )
+        return result
 
+    def get_reservations(self):
+        _LOG.info('GET reservations')
         try:
             result = []
-            response = table.scan()
-            items = response['Items']
-            for item in items:
-                result.append(
-                    {
-                        "tableNumber": int(item["tableNumber"]),
-                        "clientName": item["clientName"],
-                        "phoneNumber": item["phoneNumber"],
-                        "date": item["date"],
-                        "slotTimeStart": item["slotTimeStart"],
-                        "slotTimeEnd": item["slotTimeEnd"],
-                    }
-                )
-
-            result = {'reservations': items}
+            reservation = self._get_reservations()
+            result = {'reservations': reservation}
             _LOG.info(f"Reservation list: {result}")
             return {
                 "statusCode": 200,
