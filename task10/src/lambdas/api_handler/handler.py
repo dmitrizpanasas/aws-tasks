@@ -288,6 +288,7 @@ class ApiHandler(AbstractLambda):
             _LOG.info(f"Item of reservation: {item}")
             table.put_item(Item=item)
             response = {"reservationId": reservation_id}
+            _LOG.info(f"Response: {response}")
             return {
                 "statusCode": 200,
                 "body": json.dumps(response)
@@ -297,7 +298,6 @@ class ApiHandler(AbstractLambda):
             return {
                 "statusCode": 400
             }
-        pass
 
     def _can_reserve_table(self, new_reservation: dict, found_reservations: list):
         target_date = new_reservation.get("date")
