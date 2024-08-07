@@ -309,7 +309,8 @@ class ApiHandler(AbstractLambda):
             if item['date'] == target_date:
                 item_start = datetime.strptime(item.get("slotTimeStart"), "%H:%M")
                 item_end = datetime.strptime(item.get("slotTimeEnd"), "%H:%M")
-                if not (item_start <= target_date <= item_end):
+                target_datetime = datetime.strptime(target_date, "%H:%M")
+                if not (item_start <= target_datetime <= item_end):
                     _LOG.error("Cannot reserve: overlapping!")
                     return False
         return True
