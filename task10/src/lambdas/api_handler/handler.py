@@ -189,26 +189,47 @@ class ApiHandler(AbstractLambda):
                 'statusCode': 400
             }
 
-    def get_tables(self):
-        _LOG.info('GET tables')
-
+    def _get_tables(self):
         db = boto3.resource('dynamodb')
         table_name = os.environ['TABLES_TABLE']
         _LOG.info(f'GET tables. table name: {table_name}')
         table = db.Table(table_name)
+        tables = []
+        response = table.scan()
+        _LOG.info(f"Item from Tables: {response}")
+        for item in response["Items"]:
+            tables.append({
+                "id": int(item["id"]),
+                "number": int(item["number"]),
+                "places": int(item["places"]),
+                "isVip": item["isVip"],
+                "minOrder": int(item["minOrder"])
+            })
+        tables = sorted(tables, key=lambda i: i['id'])
+        return tables
+
+    def get_tables(self):
+        _LOG.info('GET tables')
+
+        # db = boto3.resource('dynamodb')
+        # table_name = os.environ['TABLES_TABLE']
+        # _LOG.info(f'GET tables. table name: {table_name}')
+        # table = db.Table(table_name)
         try:
-            tables = []
-            response = table.scan()
-            _LOG.info(f"Item from Tables: {response}")
-            for item in response["Items"]:
-                tables.append({
-                    "id": int(item["id"]),
-                    "number": int(item["number"]),
-                    "places": int(item["places"]),
-                    "isVip": item["isVip"],
-                    "minOrder": int(item["minOrder"])
-                })
-            tables = sorted(tables, key=lambda i: i['id'])
+            #     tables = []
+            #     response = table.scan()
+            #     _LOG.info(f"Item from Tables: {response}")
+            #     for item in response["Items"]:
+            #         tables.append({
+            #             "id": int(item["id"]),
+            #             "number": int(item["number"]),
+            #             "places": int(item["places"]),
+            #             "isVip": item["isVip"],
+            #             "minOrder": int(item["minOrder"])
+            #         })
+            #     tables = sorted(tables, key=lambda i: i['id'])
+            #     result = {"tables": tables}
+            tables = self._get_tables()
             result = {"tables": tables}
             _LOG.info(f"List of sorted tables: {result}")
             return {
@@ -224,14 +245,10 @@ class ApiHandler(AbstractLambda):
     def post_reservation(self, data: dict):
         _LOG.info("Post reservation")
 
-        db = boto3.resource('dynamodb')
-
-        tables = db.Table( os.environ['TABLES_TABLE'])
-        response = tables.scan()
-        _LOG.info(f'Scan response: {response}')
+        tables = self._get_tables()
         target_table = data['tableNumber']
-        for table in response['Items']:
-            _LOG.info(f'table item: {table}')
+        for table in tables:
+            # _LOG.info(f'table item: {table}')
             if table['number'] == target_table:
                 _LOG.info(f'Target table exists found: {target_table}')
                 break
@@ -242,6 +259,7 @@ class ApiHandler(AbstractLambda):
             }
 
         # TODO: check overriding
+
 
         db = boto3.resource('dynamodb')
         table_name = os.environ['RESERVATION_TABLE']
