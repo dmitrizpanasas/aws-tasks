@@ -269,10 +269,7 @@ class ApiHandler(AbstractLambda):
         db = boto3.resource('dynamodb')
         table_name = os.environ['RESERVATION_TABLE']
         _LOG.info(f'POST reservations. table name: {table_name}')
-        table = db.Table(table_name)
-        table_name = os.environ['TABLES_TABLE']
-        _LOG.info(f'TABLES_TABLE (reserv post): {table_name}')
-        dynamodb = boto3.resource('dynamodb')
+        reservation_db = db.Table(table_name)
 
         try:
             reservation_id = str(uuid4())
@@ -286,7 +283,7 @@ class ApiHandler(AbstractLambda):
                 "slotTimeEnd": data["slotTimeEnd"]
             }
             _LOG.info(f"Item of reservation: {item}")
-            table.put_item(Item=item)
+            reservation_db.put_item(Item=item)
             response = {"reservationId": reservation_id}
             _LOG.info(f"Response: {response}")
             return {
@@ -306,7 +303,7 @@ class ApiHandler(AbstractLambda):
         _LOG.info(f"Checking if possible to new reservation: {new_reservation}")
         for item in found_reservations:
             _LOG.info(f"Checking with: {item}")
-            if item['date'] == target_date:
+            if item['date'] == target_date and item["tableNumber"] == new_reservation["tableNumber"]:
                 item_start = datetime.strptime(item.get("slotTimeStart"), "%H:%M")
                 item_end = datetime.strptime(item.get("slotTimeEnd"), "%H:%M")
                 if (item_start <= target_time_start <= item_end) or (item_start <= target_time_end <= item_end):
