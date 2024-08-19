@@ -368,7 +368,7 @@ class ApiHandler(AbstractLambda):
                     return self.get_tables()
                 elif method == "POST":
                     return self.post_tables(json.loads(event['body']))
-            elif event["resource"] == "/tables/{tablesId}":
+            elif event["resource"] == "/tables/{tableId}":
                 table_id = int(event['path'].split('/')[-1])
                 return self.get_table_by_id(table_id)
             elif path == "/reservations":

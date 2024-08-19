@@ -358,11 +358,11 @@
         }
       }
     },
-    "/tables/{tablesId}": {
+    "/tables/{tableId}": {
       "get": {
         "parameters": [
           {
-            "name": "tablesId",
+            "name": "tableId",
             "in": "path",
             "required": true,
             "schema": {
