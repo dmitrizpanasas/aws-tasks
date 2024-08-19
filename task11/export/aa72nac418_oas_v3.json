@@ -360,6 +360,8 @@
     },
     "/tables/{tableId}": {
       "get": {
+        "summary": "Get table by ID",
+        "description": "Returns table description by ID",
         "parameters": [
           {
             "name": "tableId",
@@ -370,8 +372,6 @@
             }
           }
         ],
-        "summary": "Get table by ID",
-        "description": "Returns table description by ID",
         "responses": {
           "200": {
             "description": "200 response",
