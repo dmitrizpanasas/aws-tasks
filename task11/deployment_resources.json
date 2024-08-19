@@ -97,7 +97,7 @@
           "default_error_pattern": true
         }
       },
-      "/tables/{tablesId}": {
+      "/tables/{tableId}": {
         "GET": {
           "enable_cors": true,
           "authorization_type": "task_authorizer",
