@@ -1,0 +1,230 @@
+{
+  "lambda-basic-execution": {
+    "policy_content": {
+      "Statement": [
+        {
+          "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "dynamodb:GetItem",
+            "dynamodb:Scan",
+            "dynamodb:Query",
+            "dynamodb:PutItem",
+            "dynamodb:Batch*",
+            "dynamodb:DeleteItem",
+            "ssm:PutParameter",
+            "ssm:GetParameter",
+            "kms:Decrypt",
+            "cognito-idp:ListUserPools",
+            "cognito-idp:AdminCreateUser",
+            "cognito-idp:ListUserPoolClients",
+            "cognito-idp:AdminSetUserPassword"
+          ],
+          "Effect": "Allow",
+          "Resource": "*"
+        }
+      ],
+      "Version": "2012-10-17"
+    },
+    "resource_type": "iam_policy"
+  },
+  "Reservations": {
+    "resource_type": "dynamodb_table",
+    "hash_key_name": "id",
+    "hash_key_type": "S",
+    "read_capacity": 1,
+    "write_capacity": 1,
+    "global_indexes": [],
+    "autoscaling": []
+  },
+  "simple-booking-userpool": {
+    "resource_type": "cognito_idp",
+    "password_policy": {
+      "minimum_length": 8,
+      "require_uppercase": true,
+      "require_symbols": true,
+      "require_lowercase": true,
+      "require_numbers": true
+    },
+    "auto_verified_attributes": [],
+    "sms_configuration": {},
+    "username_attributes": [],
+    "custom_attributes": [],
+    "client": {
+      "client_name": "clientapp",
+      "generate_secret": false,
+      "explicit_auth_flows": [
+        "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+        "ALLOW_CUSTOM_AUTH",
+        "ALLOW_USER_SRP_AUTH",
+        "ALLOW_REFRESH_TOKEN_AUTH",
+        "ALLOW_USER_PASSWORD_AUTH"
+      ]
+    }
+  },
+  "task11_api": {
+    "resource_type": "api_gateway",
+    "deploy_stage": "api",
+    "dependencies": [
+      {
+        "resource_name": "api_handler",
+        "resource_type": "lambda"
+      }
+    ],
+    "resources": {
+      "/signup": {
+        "POST": {
+          "enable_cors": true,
+          "authorization_type": "NONE",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "enable_proxy": true,
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        }
+      },
+      "/signin": {
+        "POST": {
+          "enable_cors": true,
+          "authorization_type": "NONE",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "enable_proxy": true,
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        }
+      },
+      "/tables": {
+        "GET": {
+          "enable_cors": true,
+          "authorization_type": "task_authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "enable_proxy": true,
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        },
+        "POST": {
+          "enable_cors": true,
+          "authorization_type": "task_authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "enable_proxy": true,
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        }
+      },
+      "/tables/{tablesId}": {
+        "GET": {
+          "enable_cors": true,
+          "authorization_type": "task_authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "enable_proxy": true,
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        }
+      },
+      "/reservations": {
+        "GET": {
+          "enable_cors": true,
+          "authorization_type": "task_authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "enable_proxy": true,
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        },
+        "POST": {
+          "enable_cors": true,
+          "authorization_type": "task_authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "enable_proxy": true,
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        }
+      }
+    },
+    "authorizers": {
+      "task_authorizer": {
+        "type": "COGNITO_USER_POOLS",
+        "identity_source": "method.request.header.Authorization",
+        "ttl": 300,
+        "user_pools": [
+          "${booking_userpool}"
+        ]
+      }
+    }
+  },
+  "Tables": {
+    "resource_type": "dynamodb_table",
+    "hash_key_name": "id",
+    "hash_key_type": "N",
+    "read_capacity": 1,
+    "write_capacity": 1,
+    "global_indexes": [],
+    "autoscaling": []
+  },
+  "api-ui-hoster": {
+    "resource_type": "s3_bucket",
+    "acl": "public-read",
+    "cors": [],
+    "policy": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "PublicReadGetObject",
+          "Effect": "Allow",
+          "Principal": "*",
+          "Action": [
+            "s3:GetObject"
+          ],
+          "Resource": [
+            "arn:aws:s3:::{bucket_name}/*"
+          ]
+        }
+      ]
+    },
+    "public_access_block": {
+      "block_public_acls": false,
+      "ignore_public_acls": false,
+      "block_public_policy": false,
+      "restrict_public_buckets": false
+    },
+    "website_hosting": {
+      "enabled": true,
+      "index_document": "index.html",
+      "error_document": "error.html"
+    }
+  }
+}

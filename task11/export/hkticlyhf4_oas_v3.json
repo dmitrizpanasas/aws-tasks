@@ -2,11 +2,11 @@
   "openapi": "3.0.1",
   "info": {
     "title": "",
-    "version": "2024-08-09T10:41:54Z"
+    "version": "2024-08-19T10:15:19Z"
   },
   "servers": [
     {
-      "url": "https://2bl7795ixe.execute-api.eu-central-1.amazonaws.com/{basePath}",
+      "url": "https://hkticlyhf4.execute-api.eu-central-1.amazonaws.com/{basePath}",
       "variables": {
         "basePath": {
           "default": "api"
@@ -35,15 +35,18 @@
           }
         ],
         "x-amazon-apigateway-integration": {
-          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": ":aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
-              "statusCode": "200"
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
             }
           },
-          "passthroughBehavior": "when_no_match"
+          "passthroughBehavior": "when_no_match",
+          "type": "aws_proxy"
         }
       },
       "post": {
@@ -65,15 +68,18 @@
           }
         ],
         "x-amazon-apigateway-integration": {
-          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
-              "statusCode": "200"
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
             }
           },
-          "passthroughBehavior": "when_no_match"
+          "passthroughBehavior": "when_no_match",
+          "type": "aws_proxy"
         }
       }
     },
@@ -97,15 +103,18 @@
           }
         ],
         "x-amazon-apigateway-integration": {
-          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
-              "statusCode": "200"
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
             }
           },
-          "passthroughBehavior": "when_no_match"
+          "passthroughBehavior": "when_no_match",
+          "type": "aws_proxy"
         }
       },
       "post": {
@@ -127,15 +136,18 @@
           }
         ],
         "x-amazon-apigateway-integration": {
-          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
-              "statusCode": "200"
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
             }
           },
-          "passthroughBehavior": "when_no_match"
+          "passthroughBehavior": "when_no_match",
+          "type": "aws_proxy"
         }
       }
     },
@@ -154,15 +166,18 @@
           }
         },
         "x-amazon-apigateway-integration": {
-          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
-              "statusCode": "200"
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
             }
           },
-          "passthroughBehavior": "when_no_match"
+          "passthroughBehavior": "when_no_match",
+          "type": "aws_proxy"
         }
       }
     },
@@ -196,15 +211,18 @@
           }
         ],
         "x-amazon-apigateway-integration": {
-          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
-              "statusCode": "200"
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
             }
           },
-          "passthroughBehavior": "when_no_match"
+          "passthroughBehavior": "when_no_match",
+          "type": "aws_proxy"
         }
       }
     },
@@ -223,15 +241,18 @@
           }
         },
         "x-amazon-apigateway-integration": {
-          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
-              "statusCode": "200"
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
             }
           },
-          "passthroughBehavior": "when_no_match"
+          "passthroughBehavior": "when_no_match",
+          "type": "aws_proxy"
         }
       }
     }
@@ -250,8 +271,8 @@
         "in": "header",
         "x-amazon-apigateway-authtype": "cognito_user_pools",
         "x-amazon-apigateway-authorizer": {
-          "type": "cognito_user_pools",
-          "x-syndicate-cognito-userpool-names": ["simple-booking-userpool"]
+          "x-syndicate-cognito-userpool-names": ["${booking_userpool}"],
+          "type": "cognito_user_pools"
         }
       }
     }

@@ -13,8 +13,7 @@
   "env_variables": {
     "TABLES_TABLE": "${tables_table}",
     "RESERVATION_TABLE": "${reservations_table}",
-    "USER_POOL": "${booking_userpool}"
-  },
+    "USER_POOL": "${booking_userpool}"},
   "publish_version": false,
   "url_config": {},
   "ephemeral_storage": 512,

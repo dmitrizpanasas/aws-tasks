@@ -1,0 +1,12 @@
+name: aws-tasks
+events:
+- operation: assemble
+  initiator: dmitri_zavadski
+  bundle_name: aws-tasks_240802.113117
+  time_start: '2024-08-02T11:31:18Z'
+  time_end: '2024-08-02T11:31:18Z'
+  duration_sec: 0.001
+- operation: test
+  initiator: dmitri_zavadski
+  time_start: '2024-08-02T11:31:18Z'
+  time_end: '2024-08-02T11:31:18Z'

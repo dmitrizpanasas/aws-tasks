@@ -1,0 +1,12 @@
+account_id: '905418349556'
+deploy_target_bucket: syndicate-education-platform-custom-sandbox-artifacts-sbox02/27efb7c4/task10
+expiration: 2024-08-02 09:19:36.032633+00:00
+extended_prefix_mode: true
+iam_permissions_boundary: arn:aws:iam::905418349556:policy/eo_role_boundary
+project_path: /home/dmitri_zavadski/projects/epam/aws/aws-tasks
+region: eu-central-1
+resources_prefix: cmtr-27efb7c4-
+temp_aws_access_key_id: ASIA5FTZDTP2O7O6UWNW
+temp_aws_secret_access_key: DTP1MhK2UiBcLT8p2tl17M+fyOztxKzC7gGQXXJl
+temp_aws_session_token: IQoJb3JpZ2luX2VjEKH//////////wEaCXVzLWVhc3QtMSJHMEUCIQCxUEcXjtm6/6wrEsEE3fzK5Nb8xNCN2bdd/7m+cIvP2gIgLmcxQijDnUfrqBv6qoKkk4Rxk5sLIKOMREFeoHdTNq0q6QIIiv//////////ARAAGgw5MDU0MTgzNDk1NTYiDMf/LLYKqUk9Onun8Sq9AkeD7S/y8Bmhts49Sa0NDjndZd3S52Mxy2vRNWsz8tLLtKrnGfLBHvK/yqPKGAaLLTBekwKtZXHuNaSCr7MHE0w/GbjbML1bzFtCl5dufo8rwfXT7aFpQvKza6a3/XXT5DRPWNIn7eUihM5NKgP2xQGuR4QT2ROZdGQMcrzmE55gZ5+cnGt7tfP2kCcAfv3sK0zN0XVDHvWFFx7v7zHTzRiYKhEIynmVBOFyAggvITvsXfSOL/SAe/6TXzWtgl/HP0AFv3vT5adfmO9PwRBsf/NksbZo7Id132d78BWvySD8X61r2VEP9/1KsiiYJoPyzoN6IMhO3Hp9hUY3JnbxmMSZHXLAqIXtcpFK+FvL7nF0OEafB+Z3s+3q+btLfeyg1A2QGkbuRtSVEVUvHr7Um4+NrKa7WeblFg/7egWLMOqxsrUGOp0BWxGtuhc+WvbjVdtrAYdoeohVm4Fh048YIM034JXTrz2npSi+OGJJJAFNekHkmLVlzzMxibo1Xf3daCyNEHI2Dx0b/z3lbRdblK3qNETU9YZJiZ0OSscjhz/Om17+EofhNofcCRJfjsdW4Xtb+yaLe4yGFoSz/SlUrUQr69pd/6abW2ARkhrSqO3B3FkWURKqbapieQAWw4cymuO+Dg==
+use_temp_creds: false

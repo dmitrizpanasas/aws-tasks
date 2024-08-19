@@ -1,9 +1,9 @@
 {
-  "Id": "cmtr-27efb7c4-allow-role-assume",
+  "Id": "cmtr-27efb7c4-aws-key",
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "AssumeRolePolicy",
+      "Sid": "AllowUsingAWSKey",
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
       "Resource": "arn:aws:iam::905418349556:role/cmtr-27efb7c4-iam-ar-iam_role-readonly"
