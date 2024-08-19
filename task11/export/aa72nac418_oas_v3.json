@@ -2,11 +2,11 @@
   "openapi": "3.0.1",
   "info": {
     "title": "",
-    "version": "2024-08-19T10:15:19Z"
+    "version": "2024-08-19T11:56:23Z"
   },
   "servers": [
     {
-      "url": "https://hkticlyhf4.execute-api.eu-central-1.amazonaws.com/{basePath}",
+      "url": "https://aa72nac418.execute-api.eu-central-1.amazonaws.com/{basePath}",
       "variables": {
         "basePath": {
           "default": "api"
@@ -17,13 +17,15 @@
   "paths": {
     "/reservations": {
       "get": {
+        "summary": "Get reservations",
+        "description": "Get reservations",
         "responses": {
           "200": {
             "description": "200 response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/Reservation"
                 }
               }
             }
@@ -35,8 +37,9 @@
           }
         ],
         "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": ":aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "uri": ":::::::::::",
           "responses": {
             "default": {
               "statusCode": "200",
@@ -45,11 +48,12 @@
               }
             }
           },
-          "passthroughBehavior": "when_no_match",
-          "type": "aws_proxy"
+          "passthroughBehavior": "when_no_match"
         }
       },
       "post": {
+        "summary": "Create reservation",
+        "description": "Create new reservation",
         "responses": {
           "200": {
             "description": "200 response",
@@ -68,8 +72,9 @@
           }
         ],
         "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "uri": ":::::::::::",
           "responses": {
             "default": {
               "statusCode": "200",
@@ -78,13 +83,14 @@
               }
             }
           },
-          "passthroughBehavior": "when_no_match",
-          "type": "aws_proxy"
+          "passthroughBehavior": "when_no_match"
         }
       }
     },
     "/tables": {
       "get": {
+        "summary": "Get tables",
+        "description": "Get tables list",
         "responses": {
           "200": {
             "description": "200 response",
@@ -103,8 +109,9 @@
           }
         ],
         "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "uri": ":::::::::::",
           "responses": {
             "default": {
               "statusCode": "200",
@@ -113,19 +120,29 @@
               }
             }
           },
-          "passthroughBehavior": "when_no_match",
-          "type": "aws_proxy"
+          "passthroughBehavior": "when_no_match"
         }
       },
       "post": {
+        "summary": "Create table",
+        "description": "Create new table",
         "responses": {
           "200": {
             "description": "200 response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/Table"
                 }
+              }
+            }
+          }
+        },"requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Table"
               }
             }
           }
@@ -136,8 +153,9 @@
           }
         ],
         "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "uri": ":::::::::::",
           "responses": {
             "default": {
               "statusCode": "200",
@@ -146,28 +164,40 @@
               }
             }
           },
-          "passthroughBehavior": "when_no_match",
-          "type": "aws_proxy"
+          "passthroughBehavior": "when_no_match"
         }
       }
     },
     "/signin": {
       "post": {
+        "summary": "Sign in to service",
+        "description": "Sign in to service",
         "responses": {
           "200": {
             "description": "200 response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/UserSignin"
                 }
               }
             }
           }
         },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignin"
+              }
+            }
+          }
+        },
         "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "uri": ":::::::::::",
           "responses": {
             "default": {
               "statusCode": "200",
@@ -176,8 +206,7 @@
               }
             }
           },
-          "passthroughBehavior": "when_no_match",
-          "type": "aws_proxy"
+          "passthroughBehavior": "when_no_match"
         }
       }
     },
@@ -193,6 +222,8 @@
             }
           }
         ],
+        "summary": "Get table by ID",
+        "description": "Returns table description by ID",
         "responses": {
           "200": {
             "description": "200 response",
@@ -211,8 +242,9 @@
           }
         ],
         "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "uri": ":::::::::::",
           "responses": {
             "default": {
               "statusCode": "200",
@@ -221,28 +253,40 @@
               }
             }
           },
-          "passthroughBehavior": "when_no_match",
-          "type": "aws_proxy"
+          "passthroughBehavior": "when_no_match"
         }
       }
     },
     "/signup": {
       "post": {
+        "summary": "Sign up to service",
+        "description": "Sign up to service",
         "responses": {
           "200": {
             "description": "200 response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/UserSignup"
                 }
               }
             }
           }
         },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignup"
+              }
+            }
+          }
+        },
         "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
           "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
+          "uri": ":::::::::::",
           "responses": {
             "default": {
               "statusCode": "200",
@@ -251,14 +295,91 @@
               }
             }
           },
-          "passthroughBehavior": "when_no_match",
-          "type": "aws_proxy"
+          "passthroughBehavior": "when_no_match"
         }
       }
     }
   },
   "components": {
     "schemas": {
+      "UserSignup": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["firstName", "lastName", "email", "password"]
+      },
+       "UserSignin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "Table": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "number": {
+            "type": "integer"
+          },
+          "places": {
+            "type": "integer"
+          },
+          "isVip": {
+            "type": "boolean"
+          },
+          "minOrder": {
+            "type": "integer"
+          }
+        },
+        "required": ["id", "number", "places", "isVip", "minOrder"]
+      },
+      "Reservation": {
+        "type": "object",
+        "properties": {
+          "tableNumber": {
+            "type": "integer"
+          },
+          "clientName": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "slotTimeStart": {
+            "type": "string"
+          },
+          "slotTimeEnd": {
+            "type": "string"
+          }
+        },
+        "required": ["tableNumber", "clientName", "phoneNumber", "date", "slotTimeStart", "slotTimeEnd"]
+      },
       "Empty": {
         "title": "Empty Schema",
         "type": "object"
@@ -271,8 +392,10 @@
         "in": "header",
         "x-amazon-apigateway-authtype": "cognito_user_pools",
         "x-amazon-apigateway-authorizer": {
-          "x-syndicate-cognito-userpool-names": ["${booking_userpool}"],
-          "type": "cognito_user_pools"
+          "type": "cognito_user_pools",
+          "x-syndicate-cognito-userpool-names": [
+            "simple-booking-userpool"
+          ]
         }
       }
     }
